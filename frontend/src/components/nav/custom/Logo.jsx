@@ -1,10 +1,12 @@
+import LogoImg from '../../../assets/nav/k-logo.png';
+
 function Logo() {
     return (
-        <div>
-            <img src="" alt="Logo" />
-            <div>
-                <div>KADE.LK</div>
-                <div>EveryThing</div>
+        <div className='flex flex-row w-42 justify-between'>
+            <img src={LogoImg} alt="Logo" />
+            <div className='flex flex-col justify-evenly'>
+                <div className='font-bold text-2xl'>KADE.LK</div>
+                <div className='text-1xl text-gray-700'>EveryThing</div>
             </div>
         </div>
     );
