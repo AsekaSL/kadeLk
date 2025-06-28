@@ -5,22 +5,22 @@ function PagesList() {
     const listClass = 'flex flex-row items-center font-bold gap-x-3';
 
     return(
-        <ol type="none" className='flex flex-row w-125  justify-between'>
+        <ol type="none" className='flex flex-row w-90  justify-between'>
             <li className={listClass}>
-                <div >HOMES</div>
-                <img className='size-2.5' src={down} alt="Down icon" />
+                <div className='text-xs'>HOMES</div>
+                <img className='size-2' src={down} alt="Down icon" />
             </li>
             <li className={listClass}>
-                <div >PAGES</div>
-                <img className='size-2.5' src={down} alt="Down icon" />
+                <div className='text-xs'>PAGES</div>
+                <img className='size-2' src={down} alt="Down icon" />
             </li>
             <li className={listClass}>
-                <div>PRODUCTS</div>
-                <img className='size-2.5' src={down} alt="Down icon" />
+                <div  className='text-xs'>PRODUCTS</div>
+                <img className='size-2' src={down} alt="Down icon" />
             </li>
             <li className={listClass}>
-                <div>CONTACT</div>
-                <img className='size-2.5' src={down} alt="Down icon" />
+                <div className='text-xs'>CONTACT</div>
+                <img className='size-2' src={down} alt="Down icon" />
             </li>
         </ol>
     );

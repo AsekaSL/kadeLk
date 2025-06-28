@@ -6,7 +6,7 @@ import PagesList from "./custom/PagesList";
 function BottomNav() {
     return(
         <div className="flex flex-row justify-between items-center">
-            <div className="flex flex-row justify-between w-3xl">
+            <div className="flex flex-row justify-between w-xl">
                 <Logo/>
                 <PagesList/>
             </div>
