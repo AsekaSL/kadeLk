@@ -2,9 +2,9 @@ import cart from '../../../assets/nav/Cart.png';
 
 function CartDiv() {
     return(
-        <div className='flex flex-row w-[177px] items-center justify-evenly relative'>
+        <div className='flex flex-row w-[50px] lg:w-[177px]  items-center justify-evenly relative'>
             <img src={cart} alt="Cart icon" className='cursor-pointer' />
-            <div className='flex flex-col justify-evenly'>
+            <div className='hidden lg:flex flex-col justify-evenly'>
                 <div className='text-xs'>CART</div>
                 <div className='font-bold'>Rs.1,689.00</div>
             </div>

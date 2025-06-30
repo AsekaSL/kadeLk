@@ -5,7 +5,7 @@ function PagesList() {
     const listClass = 'flex flex-row items-center font-bold gap-x-3';
 
     return(
-        <ol type="none" className='flex flex-row w-90  justify-between'>
+        <ol type="none" className='hidden lg:flex flex-row lg:w-90  justify-between'>
             <li className={listClass}>
                 <div className='text-xs'>HOMES</div>
                 <img className='size-2' src={down} alt="Down icon" />

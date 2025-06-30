@@ -3,7 +3,7 @@ import Nav from "../components/nav/Nav";
 
 function Home() {
     return(
-        <div>
+        <div className="flex flex-col m-3">
             <Nav/>
         </div>
     );
