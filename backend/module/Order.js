@@ -11,7 +11,11 @@ const orderSchema = new schema({
     {
       productId: String,
       quantity: String,
-      price: String
+      price: String,
+      size: String,
+      color: String,
+      price: Number,
+      image: String
     }
   ],
   shippingAddress: {

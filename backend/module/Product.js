@@ -9,6 +9,12 @@ const productSchema = new schema({
     category: String,
     brand: String,
     rating: Number,
+    variations: [{
+        size: String,
+        color: String,
+        price: Number,
+        image: String
+    }],
     stockQuantity: Number,
     vendorId: String
 });
