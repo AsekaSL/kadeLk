@@ -3,11 +3,7 @@ const controller = require('../controller/productController');
 
 const router = express.Router();
 
-    router.post('/addProduct', (req, res) => {
-        controller.createProduct(req.body)
-        .then(response => res.send(response))
-        .catch(error => res.send(error));
-    });
+    router.post('/addProduct',controller.createProduct);
 
     router.get('/product', (req, res) => {
         controller.readProduct()
