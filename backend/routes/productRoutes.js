@@ -3,36 +3,12 @@ const controller = require('../controller/productController');
 
 const router = express.Router();
 
-    router.post('/addProduct',controller.createProduct);
+router.post('/addProduct',controller.createProduct);
 
-    router.get('/product', (req, res) => {
-        controller.readProduct()
-        .then(response => {
-            res.send(response);
-        })
-        .catch(error => {
-            res.send(error)
-        });
-    });
+router.get('/getProduct', controller.readProduct);
 
-    router.put('/updateProduct', (req, res) => {
-        controller.updateProduct(req.body)
-        .then(response => {
-            res.send(response);
-        })
-        .catch(error => {
-            res.send(error);
-        })
-    });
+router.put('/updateProduct', controller.updateProduct);
 
-    router.delete('/deleteProduct', (req, res) => {
-        controller.deleteProduct(req.body)
-        .then(response => {
-            res.send(response)
-        })
-        .catch(error => {
-            res.send(error);
-        })
-    })
+router.delete('/deleteProduct',controller.deleteProduct);
 
 module.exports = router;

@@ -1,41 +1,20 @@
 const Product = require('../module/Product');
 
-const readProduct = () => {
-    return new Promise((resolve, reject) => {
-        Product.find()
-        .then(response => resolve(response))
-        .catch(error => reject(error));
-    })
-};
+const readProduct = async (req, res) => {
+    const {productId} = req.body;
+    
+    try{
+        const product = await Product.findById(productId);
+        product ? res.send({success: true, message: product}) : res.send({success: false, message: "Invalid product"});
+    }catch(error) {
+        res.send({success: false, message: error.message});
+    }
 
-// const createProduct = (req) => {
-//     return new Promise((resolve, reject) => {
-//         const product = new Product({
-//             productId: req.productId,
-//             title: req.title,
-//             description: req.description,
-//             price: req.price,
-//             category: req.category,
-//             brand: req.brand,
-//             rating: req.rating,
-//             stockQuantity: req.stockQuantity,
-//             vendorId: req.vendorId
-//         });
-
-//         product.save()
-//         .then((response) => {
-//             resolve(response);
-//         })
-//         .catch((error) => {
-//             reject(error);
-//         });
-
-//     })
-// }
+}
 
 const createProduct = async (req, res) => {
-    const {productId, title, description, price, category,brand, rating, variations,  stockQuantity, vendorId} = req.body;
-    const product = new Product({productId, title, description, price, category,brand, rating, variations,  stockQuantity, vendorId});
+    const { title, description, category,brand, rating, variations,  stockQuantity, vendorId} = req.body;
+    const product = new Product({ title, description, category,brand, rating, variations,  stockQuantity, vendorId});
 
     try {
         const response = await product.save();
@@ -51,29 +30,40 @@ const createProduct = async (req, res) => {
 
 }
 
-const updateProduct = (req) => {
-    return new Promise((resolve, reject) => {
-        Product.updateOne({productId: req.productId}, 
-            {$set: {title: req.title, description: req.description, price: req.price, category: req.category, brand: req.brand, rating: req.rating}})
-        .then(response => {
-            resolve(response)
-        })
-        .catch(error => {
-            reject(error);
-        })
-    })
+const updateProduct = async (req, res) => {
+        const { productId, title, description, category,brand, rating, variations,  stockQuantity, vendorId} = req.body;
+
+        try{
+            const response = await Product.updateOne({_id: productId}, 
+            {$set: {title, description, price, category, brand, rating, variations, stockQuantity, vendorId}});
+
+            if(response) {
+                res.send({success: true});
+            }else {
+                res.send({success: false, message: "Error updating"})
+            }
+        }catch(error) {
+            res.send({success: false, message: error.message});
+        }
+        
 }
 
-const deleteProduct = (req) => {
-    return new Promise((resolve, reject) => {
-        Product.deleteOne({productId: req.prdocutId})
-        .then(response => {
-            resolve(response);
-        })
-        .catch(error => 
-            reject(error)
-        )
-    })
+const deleteProduct = async (req, res) => {
+
+    const {productId} = req.body;
+
+    try {
+        const response = await Product.deleteOne({_id: productId});
+
+        if(response) {
+            res.send({success: true, message: "Succssfully deleted"});
+        }else {
+            res.send({success: false, message: "Error updating"})
+        }
+
+    } catch (error) {
+        res.send({success: false, message: error.message});
+    }
 }
 
 exports.createProduct = createProduct;

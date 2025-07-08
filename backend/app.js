@@ -14,12 +14,12 @@ app.use(express.json());
 
 app.use("/api/product", productRoutes);
 
-app.use("/customer", customerRoutes);
+app.use("/api/customer", customerRoutes);
 
-app.use("/vendor", vendorRoutes);
+app.use("/api/vendor", vendorRoutes);
 
-app.use("/order", orderRoutes);
+app.use("/api/order", orderRoutes);
 
-app.use('/cart', cartRoutes);
+app.use('/api/cart', cartRoutes);
 
 module.exports = app;
