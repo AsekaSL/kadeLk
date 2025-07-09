@@ -1,58 +1,12 @@
 const express = require('express');
 const controller = require('../controller/customerController');
+const customerAuth = require('../middleware/customerAuth');
 
 const router = express.Router();
 
 
-router.get("/getAll",(req, res) => {
-    controller.readCustomers()
-    .then(response => {
-        res.send(response)
-    })
-    .catch(error => {
-        res.send(response);
-    })
-});
+router.get("/data",customerAuth, controller.getCustomerData);
 
-router.post('/add', (req, res) => {
-    controller.saveCustomer(req.body)
-    .then(response => {
-        res.send(response)
-    })
-    .catch(error => {
-        res.send(error)
-    })
-});
-
-router.get("/customer", (req, res) => {
-    controller.readCustomer(req.body)
-    .then(response => {
-        res.send(response)
-    })
-    .catch(error => {
-        res.send(error)
-    })
-});
-
-router.put('/update', (req, res) => {
-    controller.updateCustomer(req.body)
-    .then(response => {
-        res.send(response)
-    })
-    .catch(error => {
-        res.send(error)
-    })
-});
-
-router.delete('/delete', (req, res) => {
-    controller.deleteCustomer(req.body)
-    .then(response => {
-        res.send(response)
-        
-    })
-    .catch(error => {
-        res.send(error)
-    })
-})
+router.put('/update',customerAuth, controller.updateCustomerData);
 
 module.exports = router;

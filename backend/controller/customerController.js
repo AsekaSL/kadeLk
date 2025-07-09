@@ -1,85 +1,60 @@
 const Customer = require('../module/Customer');
 
-const saveCustomer = (req) => {
-    return new Promise((resolve, reject) => {
-        const customer = new Customer({
-            customerId: req.customerId,
-            name: req.name,
-            email: req.email,
-            phone: req.phone,
-            address: {
-                line: req.address.line,
-                city: req.address.city,
-                postalCode: req.address.postalCode,
-            },
-            registeredDate: req.registeredDate
-        });
 
-        customer.save()
-        .then(response => {
-            resolve(response)
-        })
-        .catch((error) => {
-            reject(error)
-        });
-    })
+const getCustomerData = async (req, res) => {
+    const {customerId} = req.body;
+
+    if(!customerId) {
+        return res.send({success: false, message: "Missing details"});
+    }
+
+    try {
+        
+        const customer = await Customer.findById(customerId);
+
+        if (!customer) {
+            return res.send({success: false, message: "User not founded"});
+        }
+
+        return res.send({success: true, userData: {
+            name: customer.name,
+            email: customer.email,
+            phone: customer.email,
+            address: customer.address,
+            registeredDate: customer.registeredDate
+        }});
+
+    } catch (error) {
+        return res.send({success: false, message: error.message});
+    }
+
+
 }
 
-const readCustomers = () => {
-    return new Promise((resolve, reject) => {
-        Customer.find()
-        .then(response => {
-            resolve(response)
-        })
-        .catch(error => {
-            reject(error)
-        })
-    })
+const updateCustomerData = async (req, res) => {
+    const {customerId, name, email, phone, address, registeredDate} = req.body;
+
+    if ( !customerId || !name || !email || !phone || !address || !registeredDate) {
+        return res.send({success: false, message: "Missing details"})
+    }
+
+    try {
+        const response = await Customer.updateOne({_id: customerId}, {$set: {name, email, phone, address, registeredDate}})
+
+        if (!response) {
+            return res.send({success: false, message: "Error Updated"})
+        }
+
+        return res.send({success: true, message: "Succsufully updated"})
+
+    } catch (error) {
+        return res.send({success: false, message: error.message});
+    }
+
 }
 
-const readCustomer = (req) => {
-    return new Promise((resolve, reject) => {
-        Customer.findOne({customerId: req.customerId})
-        .then(response => {
-            resolve(response);
-        })
-        .catch(error => {
-            reject(error)
-        })
-    })
-}
 
-const updateCustomer = (req) => {
-    return new Promise((resolve, reject) => {
-        Customer.updateOne({customerId: req.customerId}, 
-            {$set: {name: req.name, email: req.email,phone: req.phone, address: {
-                line: req.address.line,
-                city: req.address.city,
-                postalCode: req.address.postalCode
-            }, registeredDate: req.registeredDate}})
-            .then(response => {
-                resolve(response)
-            })
-            .catch(error => {
-                reject(error)
-            })
-    })
-}
 
-const deleteCustomer = (req) => {
-    return new Promise((resolve,reject) => {
-        Customer.deleteOne({customerId: req.customerId})
-        .then(response => {
-            resolve(response)
-        })
-        .catch(error => {
-            reject(error)
-        })
-    })
-}
 
-exports.saveCustomer = saveCustomer;
-exports.readCustomers = readCustomers;
-exports.readCustomer = readCustomer;
-exports.updateCustomer = updateCustomer;
-exports.deleteCustomer = deleteCustomer;
+exports.getCustomerData = getCustomerData;
+exports.updateCustomerData = updateCustomerData;
