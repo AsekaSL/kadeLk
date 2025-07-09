@@ -6,6 +6,7 @@ const vendorRoutes = require('./routes/vendorRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const authCustomerRoutes = require('./routes/authRoutes.js');
+const authVendorRoutes = require('./routes/authVendorRoutes.js');
 const cookieParser = require('cookie-parser');
 
 const app = express();
@@ -28,5 +29,8 @@ app.use('/api/cart', cartRoutes);
 
 //Auth Customer
 app.use('/api/customer', authCustomerRoutes);
+
+//Auth Vendor
+app.use('/api/vendor', authVendorRoutes);
 
 module.exports = app;

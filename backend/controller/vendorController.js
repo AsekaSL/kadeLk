@@ -1,81 +1,52 @@
 const Vendor = require('../module/Vendor');
 
 
-const addVendor = (req) => {
-    return new Promise((resolve, reject) => {
-        const vendor = new Vendor({
-            vendorId: req.vendorId,
-            companyName: req.companyName,
-            contactName: req.contactName,
-            email: req.email,
-            phone: req.phone,
-            address: {
-                line: req.address.line,
-                city: req.address.city,
-                postalCode: req.address.postalCode,
-                country: req.address.country
-            }
-        });
+const getVendor = async (req , res) => {
+    const {vendorId} = req.body;
 
-        vendor.save()
-        .then(response => {
-            resolve(response);
-        })
-        .catch(error => {
-            reject(error)
-        })
-    })
-};
+    try {
+        
+        const vendor = await Vendor.findById(vendorId);
 
-const getVendor = ((req) => {
-    return new Promise((resolve, reject) => {
-        Vendor.find()
-        .then(response => {
-            resolve(response);
-        })
-        .catch(error => {
-            reject(error);
-        });
-    })
-})
+        if(!vendor) {
+            return res.send({success: false, message: "Invalid Vendor"});
+        }
 
-const updateVendor = ((req) => {
-    return new Promise((resolve, reject) => {
-        Vendor.updateOne({vendorId: req.vendorId},
-             {$set: {
-            companyName: req.companyName,
-            contactName: req.contactName,
-            email: req.email,
-            phone: req.phone,
-            address: {
-                line: req.address.line,
-                city: req.address.city,
-                postalCode: req.address.postalCode,
-                country: req.address.country
-            }}})
-            .then(response => {
-                resolve(response)
-            })
-            .catch(error => {
-                reject(error);
-            })
-    })
-});
+        return res.send({success: true, userData: {
+            companyName: vendor.companyName,
+            contactName: vendor.contactName,
+            email: vendor.email,
+            phone: vendor.phone,
+            address: vendor.address
+        }});
 
 
-const deleteVendor = (req) => {
-    return new Promise((resolve, reject) => {
-        Vendor.deleteOne({vendorId: req.vendorId})
-        .then(response => {
-            resolve(response)
-        })
-        .catch(error => {
-            reject(error);
-        })
-    })
+    } catch (error) {
+        return res.send({success: false, message: error.message});
+    }
 }
 
-exports.addVendor = addVendor;
+const updateVendor = async (req, res) => {
+    const {vendorId, companyName, contactName, email, phone, address} = req.body;
+
+    if (!vendorId || !companyName || !contactName || !email || !phone || !address) {
+        return res.send({success: false, message: "Missing details"});
+    }
+
+    try {
+        
+       await Vendor.updateOne({_id: vendorId}, {$set: {companyName, contactName, email, phone, address}})
+       
+       return res.send({success: true, message:"Succsfully updated"});
+
+    } catch (error) {
+        return res.send({success: false, message: error.message});
+    }
+
+}
+
+
+
+
 exports.getVendor = getVendor;
 exports.updateVendor = updateVendor;
-exports.deleteVendor = deleteVendor;
