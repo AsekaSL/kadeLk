@@ -3,58 +3,67 @@ const Cart = require('../module/Cart');
 const addCart = async (req, res) => {
 
     const {customerId, items, lastUpdated} = req.body;
+    
+    try{
 
-    const cart = new Cart({
-            customerId,
-            items,
-            lastUpdated
-        });
+        const cart = await Cart.findOne({customerId});
 
-    try {
-        const response = await cart.save();
+        if(!cart) {
+            const newCart = new Cart({
+                customerId,
+                items,
+                lastUpdated
+            });
 
-        response ? res.send({success: true, message: "Succsfully deleted", response}) : res.send({success: false, message: "Not Added"}) ;
+            const response = await newCart.save();
+
+            return res.send({success: true, message: "Succsfully add to Cart", response});
+        }
+
+        const existingItem  = cart.items.find(item => String(item._id) == items[0]._id);
+        
+        if(existingItem) {
+            existingItem.quantity ++;
+            await cart.save();
+            return res.send({success: true});
+        }
+        
+        cart.items.push(items[0]);
+        await cart.save();
+
+        return res.send({success: true});
 
     } catch (error) {
-        res.send({success: false, message: error.message});
+        return res.send({success: false, message: error.message});
     }
+
 };
 
 const getCart = async (req, res) => {
 
-    const {cartId} = req.body;
+    const {customerId} = req.body;
 
     try {
-        const response = await cart.save();
+        
+        const cart = await Cart.findOne({customerId});
 
-        response ? res.send({success: true, message: "Succsfully deleted", response}) : res.send({success: false, message: "Not Added"}) ;
+        if (!cart) {
+            return res.send({success: false, message: "Cart not found"});
+        }
 
-    } catch (error) {
-        res.send({success: false, message: error.message});
-    }
-
-};
-
-const updateCart = async (req, res) => {
-
-    const {cartId, customerId, items, lastUpdated} = req.body;
-
-    try {
-        const response = await Cart.updateOne({_id: cartId}, {$set: {customerId, items, lastUpdated}});
-
-        response ? res.send({success: true, message: "Succsfully deleted", response}) : res.send({success: false, message: "Not Added"}) ;
+        return res.send({success: true, cart});
 
     } catch (error) {
-        res.send({success: false, message: error.message});
+        return res.send({success: false, message: error.message});
     }
 
 };
 
 const deleteCart = async (req, res) => {
-    const {orderId} = req.body;
+    const {customerId} = req.body;
 
     try {
-        const response = await Cart.deleteOne({_id: orderId});
+        const response = await Cart.deleteOne({customerId});
 
         if(response) {
             res.send({success: true, message: "Succssfully deleted"});
@@ -69,5 +78,4 @@ const deleteCart = async (req, res) => {
 
 exports.addCart = addCart;
 exports.getCart = getCart;
-exports.updateCart = updateCart;
 exports.deleteCart = deleteCart;

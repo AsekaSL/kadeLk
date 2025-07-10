@@ -5,7 +5,7 @@ const readProduct = async (req, res) => {
     
     try{
         const product = await Product.findById(productId);
-        product ? res.send({success: true, message: product}) : res.send({success: false, message: "Invalid product"});
+        product ? res.send({success: true, product}) : res.send({success: false, message: "Invalid product"});
     }catch(error) {
         res.send({success: false, message: error.message});
     }

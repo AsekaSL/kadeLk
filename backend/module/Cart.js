@@ -6,12 +6,13 @@ const cartSchema = new schema({
     customerId: String,
     items: [
         {
-         productId: String,
-         quantity: Number,
-         size: String,
-         color: String,
-         price: Number,
-         image: String
+         productId: {type: String},
+         title: {type: String},
+         quantity: {type:Number, default: 1},
+         size: {type: String},
+         color: {type: String},
+         price: {type: Number},
+         image: {type: String}
         }
     ],
     lastUpdated: String

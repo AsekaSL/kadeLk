@@ -5,6 +5,8 @@ const productSchema = new schema({
     productId: String,
     title: String,
     description: String,
+    price: String,
+    image: String,
     category: String,
     brand: String,
     rating: Number,
