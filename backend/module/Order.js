@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const orderSchema = new schema({
-  orderId: Number,
+  orderId: String,
   customerId: String,
   orderDate: String,
   status: String,
@@ -10,8 +10,8 @@ const orderSchema = new schema({
   items: [
     {
       productId: String,
+      title: {type: String},
       quantity: String,
-      price: String,
       size: String,
       color: String,
       price: Number,

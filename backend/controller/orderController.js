@@ -1,19 +1,20 @@
 const Order = require('../module/Order');
 
-const addOrder = async (req, res) => {
-    const { customerId, orderDate, status, totalAmount, items, shippingAddress} = req.body;
+const addOrder = async (req, res, next) => {
+    const { customerId, items, shippingAddress} = req.body;
+
+    const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     try {
         const order = new Order({
-             customerId, orderDate, status, totalAmount, items, shippingAddress
+             customerId , orderDate: Date.now(), status: "Confirmed", totalAmount, items, shippingAddress
         });
 
-        const response = await order.save();
-
-        response ? res.send({success: true, message: "Succssfully added!"}) : res.send({success: false, message: "Not Added"}) ;
+        await order.save();
+        return next();
 
     } catch (error) {
-        res.send({success: false, message: error.message});
+        return res.send({success: false, message: error.message});
     }
 
 };
@@ -23,9 +24,9 @@ const getOrder = async (req, res) => {
     const {orderId} = req.body;
 
     try {
-        const response = await Order.findById(orderId);
+        const order = await Order.findById(orderId);
 
-        response ? res.send({success: true, message: "Succsfully getOrder", response}) : res.send({success: false, message: "Not Added"}) ;
+        order ? res.send({success: true, message: "Succsfully getOrder", order}) : res.send({success: false, message: "Not Added"}) ;
 
     } catch (error) {
         res.send({success: false, message: error.message});
@@ -35,19 +36,24 @@ const getOrder = async (req, res) => {
 
 const updateOrder = async (req) => {
 
-    const { orderId ,customerId, orderDate, status, totalAmount, items, shippingAddress} = req.body;
+    const {customerId, status} = req.body;
+
+    if(!status) {
+        return res.send({success: false, message: "Missing details"});
+    }
 
     try {
         
-        const response = await Order.updateOne({_id: orderId}, {$set: {
-            customerId,
-            orderDate,
-            status,
-            totalAmount,
-            items,
-            shippingAddress}});
-        
-        response ? res.send({success: true, message: "Succsfully updated"}) : res.send({success: false, message: "Not Added"}) ;
+        const order = await Order.findOne({customerId});
+
+        if(!order) {
+            return res.send({success: false, message: "Invalid Order"});
+        }
+
+        order.status = status;
+
+        await order.save();
+        return res.send({success: true, message: "Succsfully updated"});
 
     } catch (error) {
         res.send({success: false, message: error.message});
@@ -55,12 +61,17 @@ const updateOrder = async (req) => {
 };
 
 const deleteOrder = async (req, res) => {
-    const {orderId} = req.body;
+    const {customerId} = req.body;
 
     try {
-        const response = await Order.deleteOne({_id: orderId});
+        const order = await Order.deleteOne({customerId});
 
-        response ? res.send({success: true, message: "Succsfully deleted", response}) : res.send({success: false, message: "Not Added"}) ;
+        if(!order) {
+            return res.send({success: false, message: "Not Added"}) ;
+
+        }
+        
+        return res.send({success: true, message: "Succsfully deleted", order})
 
     } catch (error) {
         res.send({success: false, message: error.message});

@@ -62,7 +62,7 @@ const login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, customer.password);
 
         if (!isMatch) {
-            res.send({success: false, message : "Invalid Password"});
+            return res.send({success: false, message : "Invalid Password"});
         }
 
         const token = jwt.sign({id: customer._id}, process.env.JWT_SECRET, {expiresIn: '7d'});
@@ -73,6 +73,8 @@ const login = async (req, res) => {
             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
             maxAge: 7*24*60*60*1000 //mili second
         });
+
+        return res.send({success: true, message: "Login Succsfully"})
 
     } catch (error) {
         res.send({success: false, message : error.message});
