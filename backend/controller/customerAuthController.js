@@ -4,18 +4,21 @@ const jwt = require('jsonwebtoken');
 const transporter  = require('../config/nodemailer.js');
 
 const register = async (req, res) => {
-    const {name, email, phone, address, registeredDate, password} = req.body;
+    
+    const {name, email, password} = req.body;
 
-    if (!name || !email || !phone || !address || !registeredDate || !password) res.send({success: false, message : "Missing details"});
+    if (!name || !email || !password) {
+        return res.send({success: false, message : "Missing details"});
+    }
 
     try {
         const existingCustomer = await Customer.findOne({email});
 
         if(existingCustomer) 
-            res.send({success: false, message : "User already exists"});
+            return res.send({success: false, message : "User already exists"});
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const customer = new Customer({name, email, phone, address, registeredDate, password: hashedPassword});
+        const customer = new Customer({name, email, password: hashedPassword});
 
         const response = await customer.save();
 
@@ -40,12 +43,12 @@ const register = async (req, res) => {
                 sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
                 maxAge: 7*24*60*60*1000 //mili second
             });
-            res.send({success: true, message: "Succsfully Registed!"});
+            return res.send({success: true, message: "Succsfully Registed!"});
         }else {
-            res.send({success: false, message : "Not registered!"});
+            return res.send({success: false, message : "Not registered!"});
         }
     } catch (error) {
-        res.send({success: false, message : error.message});
+            return res.send({success: false, message : error.message});
     }
 }
 
