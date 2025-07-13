@@ -3,6 +3,7 @@ import { assets } from "../../assets/Login/assestsLogin";
 import axios from 'axios';
 import { AppCotext } from "../../context/AppContext";
 import {toast} from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 
 function UserLogin({setForgetPassword, setIsUser}) {
     
@@ -12,9 +13,12 @@ function UserLogin({setForgetPassword, setIsUser}) {
     const [password, setPassword] = useState('');
     const [conPassword, setConPassword] = useState('');
 
+    const navigate = useNavigate();
+
     const {backendUrl, setIsLoggedin, setIsSelectLogin, getUserData} = useContext(AppCotext);
 
     const onSubmitHandler = async (e) => {
+      console.log("Hello");
         try {
             e.preventDefault();
 
@@ -26,12 +30,14 @@ function UserLogin({setForgetPassword, setIsUser}) {
               if ( !(password == conPassword) ) {
                 toast.error("Didn't match password")
               }else{
-                const {data} = await axios.post(backendUrl + '/api/customer/auth/register', {name, email, password});
+                const {data} = await axios.post(backendUrl + '/api/customer/auth/register', {name, email, password})
 
                 if(data.success) {
+                  
                     setIsLoggedin(true);
                     setIsSelectLogin(false);
                     getUserData();
+                    navigate('/');
                 }else {
                     toast.error(data.message);
                 }
@@ -42,6 +48,7 @@ function UserLogin({setForgetPassword, setIsUser}) {
                 setIsLoggedin(true);
                 setIsSelectLogin(false);
                 getUserData();
+                navigate('/');
               }else{
                 toast.error(data.message);
               }
@@ -57,7 +64,7 @@ function UserLogin({setForgetPassword, setIsUser}) {
     }
     
     return (
-    <div className="mt-10 flex items-center justify-center bg-gray-100 px-4">
+    <div className="min-h-screen mt-10 flex items-center justify-center bg-gray-100 px-4">
       <div className="bg-white rounded-xl shadow-lg overflow-hidden w-full max-w-5xl flex flex-col md:flex-row">
         
         {/* Left Side Image/Illustration */}

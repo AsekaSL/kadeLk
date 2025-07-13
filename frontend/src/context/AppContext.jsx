@@ -28,15 +28,21 @@ export const AppContextProvider = (props) => {
             } catch (error) {
                 toast.error(error.message);
             }
-        
-            try {
+    }
+
+    const getSellerData = async () => {
+        axios.defaults.withCredentials = true;
+        try {
                 const {data} = await axios.get(backendUrl + '/api/vendor/get');
-                data.success && setUserData(data.userData);
+                if (data.success) { 
+                    setUserData(data.userData);
+                    setIsLoggedin(true);
+                    setIsSeller(true);
+                }
 
             } catch (error) {
                 toast.error(error.message);
-            }
-        
+        }
     }
 
     const value = {
@@ -44,7 +50,7 @@ export const AppContextProvider = (props) => {
         isLoggedin, setIsLoggedin,
         userData, setUserData,
         isSelectLogin, setIsSelectLogin,
-        getUserData,
+        getUserData, getSellerData,
         isSeller, setIsSeller
     }
 

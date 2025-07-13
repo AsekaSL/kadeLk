@@ -2,10 +2,12 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { AppCotext } from "../../context/AppContext";
+import { useNavigate } from "react-router-dom";
 
 function SellerLogin() {
+    const navigate = useNavigate();
 
-    const {backendUrl, setIsLoggedin, setIsSelectLogin, setIsSeller, getUserData} = useContext(AppCotext);
+    const {backendUrl, setIsLoggedin, setIsSelectLogin, setIsSeller, getSellerData} = useContext(AppCotext);
 
     const [isSelectRegister, setIsSelectRegister] = useState(false);
     
@@ -40,9 +42,10 @@ function SellerLogin() {
                 
                 if(data.success) {
                     setIsSeller(true);
-                    getUserData();
+                    getSellerData();
                     setIsLoggedin(true);
                     setIsSelectLogin(false);
+                    navigate('/');
                 }else{
                     toast.error(data.message);
                 }
@@ -51,9 +54,10 @@ function SellerLogin() {
 
                 if(data.success) {
                     setIsSeller(true);
-                    getUserData();
+                    getSellerData();
                     setIsLoggedin(true);
                     setIsSelectLogin(false);
+                    navigate('/');
                 }else{
                     toast.error(data.message);
                 }

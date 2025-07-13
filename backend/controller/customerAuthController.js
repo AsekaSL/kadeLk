@@ -80,7 +80,7 @@ const login = async (req, res) => {
         return res.send({success: true, message: "Login Succsfully"})
 
     } catch (error) {
-        res.send({success: false, message : error.message});
+        return res.send({success: false, message : error.message});
     }
 
 };
@@ -92,7 +92,7 @@ const logout = async (req, res) => {
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict'
     });
 
-    res.send({success: true, message: "log out"});
+    return res.send({success: true, message: "log out"});
 };
 
 const sendVerifyOtp = async (req, res) => {

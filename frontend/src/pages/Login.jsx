@@ -3,7 +3,9 @@ import { assets } from "../assets/Login/assestsLogin";
 import UserLogin from "../components/Login/UserLogin";
 import SellerLogin from "../components/Login/SellerLogin";
 import ForgetPassword from "./ForgetPassword";
-
+import Nav from "../components/nav/Nav";
+import Search from "../components/Search/Search";
+import Footer from "../components/footer/Footer";
 
 function Login() {
 
@@ -12,9 +14,10 @@ function Login() {
   const [isForgetPassword, setForgetPassword] = useState(false);
 
   return (
-    <div>
+    <div className="flex flex-col m-3">
+      <Nav />
       {!isSeller && !isUser && !isForgetPassword &&
-        <div className="min-h-screen bg-gray-50 flex items-start justify-center px-4 pt-10">
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 ">
         <div className="w-full max-w-5xl bg-white p-8 rounded-2xl shadow-md flex flex-col items-center">
           <h2 className="text-3xl font-bold text-green-600 mb-2 text-center">
             Choose Your Role
@@ -53,6 +56,7 @@ function Login() {
             </div>
           </div>
         </div>
+        
       </div>
     }
 
@@ -61,7 +65,7 @@ function Login() {
     {isSeller && <SellerLogin  />}
 
     {isForgetPassword && <ForgetPassword setForgetPassword={(data) => setForgetPassword(data)} setIsUser={(data) => setIsUser(data)}/>}
-
+      <Footer/>
     </div>
   );
 }

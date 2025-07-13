@@ -1,8 +1,12 @@
+import { useNavigate } from 'react-router-dom';
 import cart from '../../../assets/nav/Cart.png';
 
 function CartDiv() {
+
+    const navigate = useNavigate();
+
     return(
-        <div className='flex flex-row w-[50px] lg:w-[177px]  items-center justify-evenly relative'>
+        <div className='flex flex-row w-[50px] lg:w-[177px]  items-center justify-evenly relative cursor-pointer' onClick={() => navigate('/cart')}>
             <img src={cart} alt="Cart icon" className='cursor-pointer' />
             <div className='hidden lg:flex flex-col justify-evenly'>
                 <div className='text-xs'>CART</div>

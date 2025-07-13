@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const CheckoutPage = () => {
+const CheckoutPage = ({setIsSelectCheckout, setIsOrder}) => {
   const [billingInfo, setBillingInfo] = useState({
     firstName: '',
     lastName: '',
@@ -100,7 +100,10 @@ const CheckoutPage = () => {
             ))}
           </div>
 
-          <button className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded transition">
+          <button onClick={() => {
+            setIsOrder(true); 
+            setIsSelectCheckout(false);
+          }} className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded transition">
             PLACE ORDER
           </button>
         </div>
