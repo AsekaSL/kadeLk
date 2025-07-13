@@ -12,7 +12,7 @@ const vendorAuth = async (req, res, next) => {
         const tokenDecode = jwt.verify(token, process.env.JWT_SECRET);
 
         if(tokenDecode.id) {
-            
+            req.body = req.body || {};
             req.body.vendorId = tokenDecode.id;
             return next();
         }else {

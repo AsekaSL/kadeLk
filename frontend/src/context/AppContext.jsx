@@ -15,13 +15,28 @@ export const AppContextProvider = (props) => {
     const [isSelectLogin, setIsSelectLogin] = useState(false);
 
     const getUserData = async () => {
-        try {
-            const {data} = await axios.get(backendUrl + '/api/customer/data');
-            data.success && setUserData(data.userData);
 
-        } catch (error) {
-            toast.error(error.message);
-        }
+        axios.defaults.withCredentials = true;
+        
+            try {
+                const {data} = await axios.get(backendUrl + '/api/customer/data');
+                if (data.success) {
+                    setUserData(data.userData);
+                    setIsLoggedin(true);
+                } 
+
+            } catch (error) {
+                toast.error(error.message);
+            }
+        
+            try {
+                const {data} = await axios.get(backendUrl + '/api/vendor/get');
+                data.success && setUserData(data.userData);
+
+            } catch (error) {
+                toast.error(error.message);
+            }
+        
     }
 
     const value = {
@@ -29,7 +44,8 @@ export const AppContextProvider = (props) => {
         isLoggedin, setIsLoggedin,
         userData, setUserData,
         isSelectLogin, setIsSelectLogin,
-        getUserData
+        getUserData,
+        isSeller, setIsSeller
     }
 
     return(

@@ -5,7 +5,7 @@ import { AppCotext } from "../../context/AppContext";
 
 function SellerLogin() {
 
-    const {backendUrl, setIsLoggedin, setIsSelectLogin, getUserData} = useContext(AppCotext);
+    const {backendUrl, setIsLoggedin, setIsSelectLogin, setIsSeller, getUserData} = useContext(AppCotext);
 
     const [isSelectRegister, setIsSelectRegister] = useState(false);
     
@@ -39,9 +39,10 @@ function SellerLogin() {
                 const {data} = await axios.post(backendUrl + '/api/vendor/auth/register', {companyName, contactName, phone, address,email, password});
                 
                 if(data.success) {
+                    setIsSeller(true);
+                    getUserData();
                     setIsLoggedin(true);
                     setIsSelectLogin(false);
-                    
                 }else{
                     toast.error(data.message);
                 }
@@ -49,6 +50,8 @@ function SellerLogin() {
                 const {data} = await axios.post(backendUrl + '/api/vendor/auth/login', {email, password});
 
                 if(data.success) {
+                    setIsSeller(true);
+                    getUserData();
                     setIsLoggedin(true);
                     setIsSelectLogin(false);
                 }else{

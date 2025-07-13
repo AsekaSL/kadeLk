@@ -12,6 +12,21 @@ const readProduct = async (req, res) => {
 
 }
 
+const getProducts = async (req,res) => {
+    try {
+        const products = await Product.find();
+
+        if(!products) {
+            return res.send({success: false});
+        }
+
+        res.send({success: true, products});
+
+    } catch (error) {
+        return res.send({success: false, message: error.message})
+    }
+};
+
 const createProduct = async (req, res) => {
     const { title, description, category,brand, rating,  stockQuantity, vendorId} = req.body;
 
@@ -135,3 +150,4 @@ exports.createProduct = createProduct;
 exports.readProduct = readProduct;
 exports.updateProduct = updateProduct;
 exports.deleteProduct = deleteProduct;
+exports.getProducts = getProducts;
