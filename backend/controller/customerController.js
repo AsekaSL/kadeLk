@@ -19,9 +19,9 @@ const getCustomerData = async (req, res) => {
         return res.send({success: true, userData: {
             name: customer.name,
             email: customer.email,
-            phone: customer.email,
+            phone: customer.phone,
             address: customer.address,
-            registeredDate: customer.registeredDate
+            isAccountVerified: customer.isAccountVerified
         }});
 
     } catch (error) {
@@ -32,14 +32,14 @@ const getCustomerData = async (req, res) => {
 }
 
 const updateCustomerData = async (req, res) => {
-    const {customerId, name, email, phone, address, registeredDate} = req.body;
+    const {customerId, name, email, phone, address} = req.body;
 
-    if ( !customerId || !name || !email || !phone || !address || !registeredDate) {
+    if ( !customerId || !name || !email || !phone || !address ) {
         return res.send({success: false, message: "Missing details"})
     }
 
     try {
-        const response = await Customer.updateOne({_id: customerId}, {$set: {name, email, phone, address, registeredDate}})
+        const response = await Customer.updateOne({_id: customerId}, {$set: {name, email, phone, address}})
 
         if (!response) {
             return res.send({success: false, message: "Error Updated"})

@@ -5,6 +5,6 @@ const vendorAuth = require('../middleware/vendorAuth');
 const router = express.Router();
 
 router.get('/get', vendorAuth, controller.getVendor);
-router.put('/update',vendorAuth, controller.updateVendor);
+router.post('/update',vendorAuth, controller.updateVendor);
 
 module.exports = router;

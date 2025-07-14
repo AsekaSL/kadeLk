@@ -7,6 +7,6 @@ const router = express.Router();
 
 router.get("/data",customerAuth, controller.getCustomerData);
 
-router.put('/update',customerAuth, controller.updateCustomerData);
+router.post('/update',customerAuth, controller.updateCustomerData);
 
 module.exports = router;

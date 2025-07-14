@@ -13,6 +13,6 @@ router.post('/updateProduct', upload,controller.updateProduct);
 
 router.delete('/deleteProduct',controller.deleteProduct);
 
-router.get('/data', vendorAuth, controller.getProducts);
+router.get('/data', controller.getProducts);
 
 module.exports = router;

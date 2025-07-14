@@ -17,7 +17,8 @@ const getVendor = async (req , res) => {
             contactName: vendor.contactName,
             email: vendor.email,
             phone: vendor.phone,
-            address: vendor.address
+            address: vendor.address,
+            isAccountVerified: vendor.isAccountVerified
         }});
 
 

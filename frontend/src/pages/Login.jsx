@@ -2,7 +2,7 @@ import { useState } from "react";
 import { assets } from "../assets/Login/assestsLogin";
 import UserLogin from "../components/Login/UserLogin";
 import SellerLogin from "../components/Login/SellerLogin";
-import ForgetPassword from "./ForgetPassword";
+import ForgetPassword from "../components/Login/ForgetPassword";
 import Nav from "../components/nav/Nav";
 import Search from "../components/Search/Search";
 import Footer from "../components/footer/Footer";

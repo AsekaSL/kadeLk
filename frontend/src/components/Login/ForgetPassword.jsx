@@ -1,13 +1,14 @@
 import { useContext, useRef, useState } from "react";
-import { assets } from "../assets/Login/assestsLogin";
-import { AppCotext } from "../context/AppContext";
+import { assets } from "../../assets/Login/assestsLogin";
+import { AppCotext } from "../../context/AppContext";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 
 function ForgetPassword({setForgetPassword, setIsUser}) {
 
-    const {backendUrl, setIsLoggedin, setIsSelectLogin, getUserData} = useContext(AppCotext);
+    const {backendUrl, isLoggedin, isSeller, getUserData} = useContext(AppCotext);
 
     const [email, setEmail] = useState('');
     const [isSentRestOtp, setIsSentRestOtp] = useState(false);
@@ -16,6 +17,8 @@ function ForgetPassword({setForgetPassword, setIsUser}) {
     const [newPassword, setNewPassword] = useState('');
     const [conPassword, setConPassword] = useState('');
     const inputRefs = useRef([]);
+
+    const navigate = useNavigate();
 
     const handleChange = (e, index) => {
         const value = e.target.value;
@@ -37,13 +40,14 @@ function ForgetPassword({setForgetPassword, setIsUser}) {
         }
     };
 
+    // Handle for the email to otp
     const handleSubmit = async (e) => {
         e.preventDefault();
         axios.defaults.allowAbsoluteUrls = true;
 
         try {
             
-            const {data} = await axios.post(backendUrl + '/api/customer/auth/sent-reset-otp', {email});
+            const {data} = isSeller ? await axios.post(backendUrl+'/api/vendor/auth/send-reset-otp', {email}) : await axios.post(backendUrl + '/api/customer/auth/sent-reset-otp', {email});
 
             if(data.success) {
                 toast.success(data.message);
@@ -58,6 +62,7 @@ function ForgetPassword({setForgetPassword, setIsUser}) {
 
     };
 
+    //Chanage password
     const handleSubmitReset = async (e) => {
         e.preventDefault();
         
@@ -69,12 +74,13 @@ function ForgetPassword({setForgetPassword, setIsUser}) {
                 toast.error("Password doesn't match");
             }else {
 
-                const {data} = await axios.post(backendUrl+'/api/customer/auth/reset-password', {email, otp, newPassword})
+                const {data} = isSeller ? await axios.post(backendUrl+'/api/vendor/auth/reset-password', {email, otp, newPassword}) : await axios.post(backendUrl+'/api/customer/auth/reset-password', {email, otp, newPassword})
                 
                 if(data.success) {
                     toast.success(data.message);
-                    setForgetPassword(false);
-                    setIsUser(true);
+                    navigate('/profile')
+                    //setForgetPassword(false);
+                    //setIsUser(true);
                 }else{
                     toast.error(data.message);
                 }
@@ -95,7 +101,7 @@ function ForgetPassword({setForgetPassword, setIsUser}) {
                         <img src={assets.forget} className="hidden md:block md:w-1/2 bg-cover bg-center w-md" />
                         {/* Form Section */}
                         <div className="w-full md:w-1/2 p-8">
-                        <h2 className="text-2xl font-bold text-green-600 mb-4">Forgot your password?</h2>
+                        <h2 className="text-2xl font-bold text-green-600 mb-4">{!isLoggedin? "Forgot your password?" :  "Change Password"}</h2>
                         <p className="text-sm text-gray-500 mb-6">
                             Don’t worry! Enter your email address and we’ll send you a code to reset your password.
                         </p>
@@ -162,7 +168,7 @@ function ForgetPassword({setForgetPassword, setIsUser}) {
                         </form>
                         </div>
                     </div>
-                    </div>
+                </div>
             }
 
             {
@@ -204,7 +210,7 @@ function ForgetPassword({setForgetPassword, setIsUser}) {
                         </form>
                         </div>
                     </div>
-                    </div>
+                </div>
             }
         </div>
     
