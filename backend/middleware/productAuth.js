@@ -1,8 +1,8 @@
 const Product = require('../module/Product.js');
 
 const productAuth = async (req, res, next) => {
-    const {productId, itemId} = req.body;
-
+    const {productId, item, quantity} = req.body;
+    
     if(!productId) {
         return res.send({success: false, message: "Missing details"});
     }
@@ -15,20 +15,12 @@ const productAuth = async (req, res, next) => {
             return res.send({success: false, message: "Product not found"});
         }
 
-        
-
         if(product.variations.length == 0) {
-            req.body.items = {productId, title: product.title, price: product.price, image: product.image};
+            req.body.items = {productId, title: product.title, price: product.price, image: product.image, quantity};
             return next();
         }
-
-        const item = product.variations.filter(item => {
-            if(item._id == itemId ) {
-                return item;
-            }
-        });
-
-        req.body.items = [{productId, title: product.title,size: item[0].size, color: item[0].color, price: item[0].price, image: item[0].image, _id: item[0]._id}];
+        
+        req.body.items = [{productId, title: product.title,size: item.size, color: item.color, price: item.price, image: item.image, quantity}];
         
         return next();
 

@@ -17,7 +17,6 @@ function ShopListing() {
     try {
       
       const {data} = await axios.get(backendUrl+'/api/product/data');
-      console.log(data);
       data.success ? setProducts(data.products) : toast.error(data.message);
 
     } catch (error) {
@@ -27,7 +26,7 @@ function ShopListing() {
 
   useEffect(() => {
     getProducts();
-    console.log(products);
+    
   },[])
 
   return (
@@ -42,7 +41,7 @@ function ShopListing() {
             {products.map((product, index) => (
               <div
                 key={index}
-                onClick={() => {setIsSelectProduct(true)}}
+                onClick={() => {setIsSelectProduct(product); }}
                 className="bg-white rounded-xl shadow-sm hover:shadow-lg transition p-4 flex flex-col cursor-pointer"
               >
                 <img
@@ -87,7 +86,7 @@ function ShopListing() {
       }
       {
         isSelectProduct && 
-        <ProductProfile/>
+        <ProductProfile isSelectProduct={isSelectProduct} setIsSelectProduct={(data) => setIsSelectProduct(data)} />
       }
       <Footer/>
     </div>

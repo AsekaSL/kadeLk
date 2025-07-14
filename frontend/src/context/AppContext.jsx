@@ -12,6 +12,7 @@ export const AppContextProvider = (props) => {
     const [isLoggedin, setIsLoggedin] = useState(false);
     const [isSeller, setIsSeller] = useState(false);
     const [userData, setUserData] = useState(false);
+    const [cartData, setCartData] = useState(false);
     const [isSelectLogin, setIsSelectLogin] = useState(false);
 
     const getUserData = async () => {
@@ -45,13 +46,32 @@ export const AppContextProvider = (props) => {
         }
     }
 
+    const getCartData = async () => {
+        
+        axios.defaults.withCredentials = true;
+        try {
+            
+            const {data} = await axios.post(backendUrl + '/api/cart/get');
+            
+            if (data.success) { 
+                setCartData(data.cart);
+            }else{
+                setCartData([]);
+            }
+        } catch (error) {
+            toast.error(error.message);
+        }
+    }
+
     const value = {
         backendUrl,
         isLoggedin, setIsLoggedin,
         userData, setUserData,
         isSelectLogin, setIsSelectLogin,
         getUserData, getSellerData,
-        isSeller, setIsSeller
+        isSeller, setIsSeller,
+        getCartData,
+        cartData, setCartData
     }
 
     return(

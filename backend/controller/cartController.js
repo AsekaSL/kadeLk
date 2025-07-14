@@ -2,7 +2,7 @@ const Cart = require('../module/Cart');
 
 const addCart = async (req, res) => {
 
-    const {customerId, items, lastUpdated} = req.body;
+    const {customerId, items, lastUpdated, quantity} = req.body;
     
     try{
 
@@ -20,10 +20,10 @@ const addCart = async (req, res) => {
             return res.send({success: true, message: "Succsfully add to Cart", response});
         }
 
-        const existingItem  = cart.items.find(item => String(item._id) == items[0]._id);
+        const existingItem  = cart.items.find(item => String(item.color) == items[0].color && item.productId == items[0].productId);
         
         if(existingItem) {
-            existingItem.quantity ++;
+            existingItem.quantity+= parseInt(items[0].quantity) ;
             await cart.save();
             return res.send({success: true});
         }
@@ -31,7 +31,7 @@ const addCart = async (req, res) => {
         cart.items.push(items[0]);
         await cart.save();
 
-        return res.send({success: true});
+        return res.send({success: true, message: "Succsfully add to Cart"});
 
     } catch (error) {
         return res.send({success: false, message: error.message});
@@ -40,7 +40,7 @@ const addCart = async (req, res) => {
 };
 
 const getCart = async (req, res) => {
-
+    
     const {customerId} = req.body;
 
     try {

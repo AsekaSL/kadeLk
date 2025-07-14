@@ -12,7 +12,6 @@ function LoginRegi() {
     useEffect(() => {
         getSellerData();
         getUserData();
-        console.log(userData);
     },[]);
 
     return(

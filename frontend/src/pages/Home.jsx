@@ -8,11 +8,12 @@ import Footer from "../components/footer/Footer";
 
 function Home() {
 
-    const {isSeller, isLoggedin, getUserData, getSellerData} = useContext(AppCotext);
+    const {isSeller, isLoggedin, getUserData, getSellerData, getCartData} = useContext(AppCotext);
 
     useEffect(() => {
         getSellerData();
         getUserData();
+        getCartData();
     },[]);
 
     return(

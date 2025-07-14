@@ -50,7 +50,6 @@ function UserProfile() {
   //Logout method
   const onSubmitButton = async (item) => {
     axios.defaults.withCredentials = true;
-    console.log(userData)
     try {
 
       if (item == 'Logout') {

@@ -6,7 +6,7 @@ const productAuth = require('../middleware/productAuth.js');
 const router = express.Router();
 
 
-router.get("/get", customerAuth ,controller.getCart);
+router.post("/get", customerAuth ,controller.getCart);
 
 router.post('/add', customerAuth, productAuth ,controller.addCart);
 

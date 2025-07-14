@@ -12,6 +12,7 @@ import headPhoneW from './headPhone-w.png';
 import ps5 from './ps5.png'
 import keyboard from './keyboard.png'
 import okodo from './okodo.png'
+import leftArrow from './left-arrow.png';
 
 export const assets = {
     watch,
@@ -27,5 +28,6 @@ export const assets = {
     headPhoneW,
     ps5,
     keyboard,
-    okodo
+    okodo,
+    leftArrow
 };

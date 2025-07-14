@@ -15,10 +15,9 @@ function UserLogin({setForgetPassword, setIsUser}) {
 
     const navigate = useNavigate();
 
-    const {backendUrl, setIsLoggedin, setIsSelectLogin, getUserData} = useContext(AppCotext);
+    const {backendUrl, setIsLoggedin, setIsSelectLogin, getUserData, getCartData} = useContext(AppCotext);
 
     const onSubmitHandler = async (e) => {
-      console.log("Hello");
         try {
             e.preventDefault();
 
@@ -33,10 +32,10 @@ function UserLogin({setForgetPassword, setIsUser}) {
                 const {data} = await axios.post(backendUrl + '/api/customer/auth/register', {name, email, password})
 
                 if(data.success) {
-                  
                     setIsLoggedin(true);
                     setIsSelectLogin(false);
                     getUserData();
+                    getCartData();
                     navigate('/');
                 }else {
                     toast.error(data.message);
@@ -48,6 +47,7 @@ function UserLogin({setForgetPassword, setIsUser}) {
                 setIsLoggedin(true);
                 setIsSelectLogin(false);
                 getUserData();
+                getCartData();
                 navigate('/');
               }else{
                 toast.error(data.message);

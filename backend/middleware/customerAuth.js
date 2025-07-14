@@ -14,8 +14,8 @@ const customerAuth = async (req, res, next) => {
         
         if(tokenDecode.id) {
             req.body = req.body || {};
-            req.body.customerId = tokenDecode.id;
             
+            req.body.customerId = tokenDecode.id;
             return next();
         }else {
             return res.send({success: false, message: "Not Authorized. Login Again"});
