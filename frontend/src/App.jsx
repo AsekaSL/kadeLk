@@ -8,6 +8,7 @@ import CartPage from "./pages/CartPage";
 import UserProfile from "./pages/UserProfile";
 import SellerDashboard from "./pages/SellerDahboard.jsx";
 import EmailVerify from "./components/Login/EmailVerify.jsx";
+import OrderConfirmation from "./components/cart/OrderConfirmation.jsx";
 
 function App() {
   return(
@@ -23,6 +24,7 @@ function App() {
         <Route path="/sellerDashboard" element={<SellerDashboard/> } />
         <Route path="/emailVerify" element={<EmailVerify/>} />
         <Route path="/changePass" element={<ForgetPassword/>} />
+        <Route path="/orderCon" element={<OrderConfirmation/>} />
       </Routes>
     </div>
   )

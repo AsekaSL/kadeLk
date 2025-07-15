@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post('/add', customerAuth ,orderAuth ,controller.addOrder, cartController.deleteCart);
 
-router.get('/get',controller.getOrder);
+router.get('/get',customerAuth,controller.getOrder);
 
 
 router.put('/update', vendorAuth ,controller.updateOrder);

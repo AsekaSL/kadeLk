@@ -66,13 +66,13 @@ const deleteCart = async (req, res) => {
         const response = await Cart.deleteOne({customerId});
 
         if(response) {
-            res.send({success: true, message: "Succssfully deleted"});
+            return res.send({success: true, message: "Succssfully add Order", orderId: req.orderId});
         }else {
-            res.send({success: false, message: "Error updating"})
+            return res.send({success: false, message: "Error updating"})
         }
 
     } catch (error) {
-        res.send({success: false, message: error.message});
+        return res.send({success: false, message: error.message});
     }
 };
 

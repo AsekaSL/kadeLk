@@ -11,6 +11,7 @@ const addOrder = async (req, res, next) => {
         });
 
         await order.save();
+        req.orderId = String(order._id);
         return next();
 
     } catch (error) {
@@ -21,10 +22,10 @@ const addOrder = async (req, res, next) => {
 
 
 const getOrder = async (req, res) => {
-    const {orderId} = req.body;
+    const {productId} = req.body;
 
     try {
-        const order = await Order.findById(orderId);
+        const order = await Order.findOne({productId});
 
         order ? res.send({success: true, message: "Succsfully getOrder", order}) : res.send({success: false, message: "Not Added"}) ;
 

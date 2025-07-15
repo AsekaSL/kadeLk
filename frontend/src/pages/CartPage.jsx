@@ -2,47 +2,20 @@ import Nav from "../components/nav/Nav";
 import Search from "../components/Search/Search";
 import Footer from "../components/footer/Footer";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import CheckoutPage from "../components/cart/CheckoutPage";
 import OrderConfirmation from "../components/cart/OrderConfirmation";
+import { AppCotext } from "../context/AppContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const CartPage = () => {
-  const cartItems = [
-    {
-      id: 1,
-      name: 'SROK Smart Phone 128GB, Oled Retina',
-      price: 579,
-      discount: 199,
-      shipping: 'Free Shipping',
-      stock: true,
-      image: '/images/srok-phone.png',
-    },
-    {
-      id: 2,
-      name: 'aPod Pro Tablet 2023 LTE + Wifi, GPS Cellular 12.9 Inch, 512GB',
-      price: 979,
-      discount: 0,
-      shipping: '$2.98 Shipping',
-      stock: true,
-      image: '/images/apod-tablet.png',
-    },
-    {
-      id: 3,
-      name: 'Samsung Galaxy X6 Ultra LTE 4G/128 Gb, Black Smartphone',
-      price: 659,
-      discount: 0,
-      shipping: 'Free Shipping',
-      stock: true,
-      image: '/images/galaxy-x6.png',
-    },
-  ];
 
-  const summary = {
-    subtotal: 1000,
-    shipping: 600,
-    tax: 137,
-    total: 1737,
-  };
+  const {items, getTheCart } = useContext(AppCotext);
+
+  useEffect(() => {
+    getTheCart();
+  },[])
 
   const [isSelectCheckout, setIsSelectCheckout] = useState(false);
   const [isOrder, setIsOrder] = useState(false);
@@ -52,28 +25,29 @@ const CartPage = () => {
       <Nav />
       <Search/>
       {!isSelectCheckout && !isOrder &&
-          <div className="bg-gray-50 min-h-screen p-8">
+          <div className="bg-gray-50 min-h-screen p-8 relative">
+            <button className="absolute right-0 top-0 mt-4 bg-green-500 text-white py-2 rounded hover:bg-green-600 transition" onClick={() => setIsOrder(true)}>Checkout</button>
         <h1 className="text-2xl font-bold mb-6">Shopping Cart</h1>
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Cart Items */}
           <div className="flex-1 space-y-6">
-            {cartItems.map(item => (
-              <div key={item.id} className="bg-white shadow p-6 rounded-lg flex items-center gap-4">
-                <img src={item.image} alt={item.name} className="w-24 h-24 object-cover rounded" />
+            {items.map((item,index) => (
+              <div key={index} className="bg-white shadow p-6 rounded-lg flex items-center gap-4">
+                <img src={item.image} alt={item.title} className="w-24 h-24 object-cover rounded" />
                 <div className="flex-1">
-                  <h2 className="text-lg font-semibold">{item.name}</h2>
+                  <h2 className="text-lg font-semibold">{item.title}</h2>
                   <p className="text-gray-500">
                     Price: <span className="text-black font-semibold">${item.price}</span>
                     {item.discount > 0 && (
-                      <span className="ml-2 text-green-500">Save ${item.discount}</span>
+                      <span className="ml-2 text-green-500">Save ${item.price}</span>
                     )}
                   </p>
-                  <p className="text-sm text-gray-600">{item.shipping}</p>
+                  <p className="text-sm text-gray-600">{item.color}</p>
                   <p className={`text-sm ${item.stock ? 'text-green-600' : 'text-red-600'}`}>
-                    {item.stock ? 'In stock' : 'Out of stock'}
+                    {item.size}
                   </p>
                 </div>
-                <input type="number" defaultValue={1} className="w-16 border rounded px-2 py-1" />
+                <input type="number" value={item.quantity} className="w-16 border rounded px-2 py-1" />
               </div>
             ))}
           </div>
@@ -84,20 +58,20 @@ const CartPage = () => {
             <div className="space-y-2 text-gray-700">
               <div className="flex justify-between">
                 <span>Sub Total</span>
-                <span>${summary.subtotal}</span>
+                <span>{items.reduce((total, item) => total + item.quantity * item.price, 0).toLocaleString("en-LK", { style: "currency", currency: "LKR" })}</span>
               </div>
               <div className="flex justify-between">
                 <span>Shipping estimate</span>
-                <span>${summary.shipping}</span>
+                <span>LKR. 600</span>
               </div>
               <div className="flex justify-between">
                 <span>Tax estimate</span>
-                <span>${summary.tax}</span>
+                <span>LKR. 500</span>
               </div>
               <hr className="my-2" />
               <div className="flex justify-between font-bold text-lg">
                 <span>Total</span>
-                <span>${summary.total}</span>
+                <span>{(items.reduce((total, item) => total + item.quantity * item.price, 0) + 700 ).toLocaleString("en-LK", { style: "currency", currency: "LKR" })}</span>
               </div>
               <button onClick={() => setIsSelectCheckout(true)} className="w-full mt-4 bg-green-500 text-white py-2 rounded hover:bg-green-600 transition">
                 CHECKOUT

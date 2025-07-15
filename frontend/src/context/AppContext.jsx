@@ -13,7 +13,9 @@ export const AppContextProvider = (props) => {
     const [isSeller, setIsSeller] = useState(false);
     const [userData, setUserData] = useState(false);
     const [cartData, setCartData] = useState(false);
+    const [newOrder, setNewOrder] = useState(false);
     const [isSelectLogin, setIsSelectLogin] = useState(false);
+    const [items, setItems] = useState([]);
 
     const getUserData = async () => {
 
@@ -63,6 +65,33 @@ export const AppContextProvider = (props) => {
         }
     }
 
+    const getTheCart = async () => {
+        axios.defaults.withCredentials = true;
+    
+        try {
+          const {data} = await axios.post(backendUrl + '/api/cart/get');
+          if(data.success) {
+            setItems(data.cart.items);
+            console.log(data.cart.items);
+          }
+        } catch (error) {
+          toast.error(error.message);
+        }
+    
+      };
+
+    const getOrder = async () => {
+      try {
+        const {data} = await axios.get(backendUrl + '/api/order/get');
+        if(data.success) {
+          setNewOrder(data.order);
+          console.log(data.order);
+        }
+      } catch (error) {
+        toast.success(error.message);
+      }
+    };
+
     const value = {
         backendUrl,
         isLoggedin, setIsLoggedin,
@@ -71,7 +100,11 @@ export const AppContextProvider = (props) => {
         getUserData, getSellerData,
         isSeller, setIsSeller,
         getCartData,
-        cartData, setCartData
+        cartData, setCartData,
+        getTheCart,
+        items, setItems,
+        getOrder,
+        newOrder, setNewOrder
     }
 
     return(

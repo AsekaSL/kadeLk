@@ -1,8 +1,14 @@
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AppCotext } from "../../context/AppContext";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const OrderConfirmation = () => {
 
+   
 
+    const {newOrder, getOrder} = useContext(AppCotext);
     const order = {
         orderId: "ORD12345678",
         total: 135000,
@@ -29,6 +35,11 @@ const OrderConfirmation = () => {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+      getOrder();
+    }, [])
+    
+
   return (
     <div className="min-h-screen bg-gray-50 p-6 md:p-12 flex items-center justify-center">
       <div className="bg-white p-8 rounded-2xl shadow-lg max-w-3xl w-full">
@@ -45,7 +56,7 @@ const OrderConfirmation = () => {
 
           <h2 className="text-2xl font-bold text-gray-800">Thank you for your order!</h2>
           <p className="text-sm text-gray-600 mt-2">
-            Your order <span className="font-semibold text-black">#{order.orderId}</span> has been placed successfully.
+            Your order <span className="font-semibold text-black">#{newOrder._id}</span> has been placed successfully.
           </p>
         </div>
 
@@ -53,9 +64,9 @@ const OrderConfirmation = () => {
         <div className="mt-6">
           <h3 className="text-lg font-semibold mb-3">Order Summary</h3>
           <ul className="space-y-2">
-            {order.items.map((item, idx) => (
+            {newOrder?.items?.map((item) => (
               <li
-                key={idx}
+                key={item._id}
                 className="flex justify-between border-b pb-2 text-sm text-gray-700"
               >
                 <span>
@@ -68,7 +79,7 @@ const OrderConfirmation = () => {
 
           <div className="mt-4 flex justify-between font-bold text-gray-800">
             <span>Total:</span>
-            <span>Rs.{order.total.toLocaleString()}</span>
+            <span>Rs.{newOrder?.totalAmount?.toLocaleString()}</span>
           </div>
         </div>
 
@@ -76,10 +87,10 @@ const OrderConfirmation = () => {
         <div className="mt-6">
           <h3 className="text-lg font-semibold mb-2">Shipping Information</h3>
           <div className="text-sm text-gray-700">
-            <p>{order.shipping.fullName}</p>
-            <p>{order.shipping.address}</p>
-            <p>{order.shipping.city}, {order.shipping.zip}</p>
-            <p>{order.shipping.phone}</p>
+            <p>{newOrder?.shippingAddress?.line}</p>
+            <p>{newOrder?.shippingAddress?.city}</p>
+            <p>{newOrder?.shippingAddress?.postalCode}</p>
+            <p>{Date(newOrder?.orderDate)}</p>
           </div>
         </div>
 
