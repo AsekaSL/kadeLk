@@ -39,3 +39,9 @@ This is a full-stack multi-vendor ecommerce web application developed using **Re
 
 ## 📁 Project Structure
 
+/frontend => React frontend
+/backend => Node.js + Express backend
+/models => Mongoose models
+/routes => Express routes
+/controllers => Business logic
+/utils => Utility functions (e.g., auth)
