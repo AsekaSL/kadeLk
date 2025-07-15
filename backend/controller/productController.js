@@ -1,11 +1,15 @@
 const Product = require('../module/Product');
 
 const readProduct = async (req, res) => {
-    const {productId} = req.body;
+    const {vendorId} = req.body;
     
     try{
-        const product = await Product.findById(productId);
-        product ? res.send({success: true, product}) : res.send({success: false, message: "Invalid product"});
+        const products = await Product.find({vendorId});
+        if(products) {
+            return res.send({success: true, products})}
+        else { 
+            return res.send({success: false, message: "Invalid product"})
+        };
     }catch(error) {
         res.send({success: false, message: error.message});
     }
@@ -28,44 +32,64 @@ const getProducts = async (req,res) => {
 };
 
 const createProduct = async (req, res) => {
-    const { title, description, category,brand, rating,  stockQuantity, vendorId} = req.body;
+  try {
+    const {
+      title,
+      description,
+      price,
+      category,
+      brand,
+      rating,
+      stockQuantity,
+      vendorId
+    } = req.body;
 
-    let variations = [];
     let mainImage = '';
+    let variations = [];
 
-    // If no variations — simple product
-    if (!req.body.variations) {
-        const imageFile = req.files.find(f => f.fieldname === 'image');
-        mainImage = imageFile?.path || '';
-    } else {
-        // Parse variations
-        variations = JSON.parse(req.body.variations);
+    const files = req.files || [];
 
-        req.files.forEach(file => {
-        const match = file.fieldname.match(/image_(\d+)/);
-        if (match) {
-            const index = parseInt(match[1]);
-            if (variations[index]) {
-            variations[index].image = file.path; // Add Cloudinary URL
-            }
-        }
-        });
+    // 1. Get main product image (fieldname === "image")
+    const imageFile = files.find(file => file.fieldname === 'image');
+    if (imageFile) {
+      mainImage = imageFile.path; // Cloudinary URL
     }
 
-    const product = new Product({ title, description, category,brand, rating, image: mainImage ,variations,  stockQuantity, vendorId});
+    // 2. Parse variations JSON string
+    if (req.body.variations) {
+      variations = JSON.parse(req.body.variations);
 
-    try {
-        const response = await product.save();
+      // 3. Get variationImages (multiple files with same fieldname)
+      const variationImages = files.filter(file => file.fieldname === 'variationImages');
 
-        if(response) {
-            return res.send({success: true});
-        }else {
-            return res.send({success: false});
-        }
-    } catch (error) {
-        return res.send({success: false, message: error.message});
+      // 4. Map each uploaded image to variations by index
+      variations.forEach((variation, index) => {
+        variation.image = variationImages[index]?.path || ''; // Assign Cloudinary URL
+      });
     }
 
+    // 5. Create product
+    const product = new Product({
+      title,
+      description,
+      price,
+      category,
+      brand,
+      rating,
+      image: mainImage,
+      variations,
+      stockQuantity,
+      vendorId
+    });
+
+    const saved = await product.save();
+
+    return res.status(200).json({ success: true, message: "Product created", product: saved });
+
+  } catch (error) {
+    console.error("Error in createProduct:", error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
 };
 
 const updateProduct = async (req, res) => {

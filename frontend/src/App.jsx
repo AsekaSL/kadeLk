@@ -25,6 +25,7 @@ function App() {
         <Route path="/emailVerify" element={<EmailVerify/>} />
         <Route path="/changePass" element={<ForgetPassword/>} />
         <Route path="/orderCon" element={<OrderConfirmation/>} />
+        <Route path="/dashboard" element={<SellerDashboard/>} />
       </Routes>
     </div>
   )

@@ -7,17 +7,17 @@ import { AppCotext } from '../../../context/AppContext';
 function CartDiv() {
 
     const navigate = useNavigate();
-    const {cartData, getCartData} = useContext(AppCotext);
+    const {cartData, getCartData, isSeller} = useContext(AppCotext);
 
     useEffect(() => {
         getCartData();
     },[cartData])
 
     return(
-        <div className='flex flex-row w-[50px] lg:w-[177px]  items-center justify-evenly relative cursor-pointer' onClick={() => navigate('/cart')}>
+        <div className='flex flex-row w-[50px] lg:w-[177px]  items-center justify-evenly relative cursor-pointer' onClick={() => !isSeller ? navigate('/cart') : navigate('/dashboard')}>
             <img src={cart} alt="Cart icon" className='cursor-pointer' />
             <div className='hidden lg:flex flex-col justify-evenly'>
-                <div className='text-xs'>CART</div>
+                <div className='text-xs'>{isSeller ? 'SHOP' : 'CART'}</div>
                 <div className='font-bold'>
                     {
                         cartData?.items
